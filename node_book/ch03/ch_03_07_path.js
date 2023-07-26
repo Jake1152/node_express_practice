@@ -21,6 +21,6 @@ console.log('------------------------------');
 console.log('path.isAbsolute(C:\):', path.isAbsolute('C:\\'));
 console.log('path.isAbsolute(./home):', path.isAbsolute('./home'));
 console.log('------------------------------');
-console.log('path.relative():', path.relative('C:\\Users\Bluffing\path.js', 'C:\\'));
+console.log('path.relative():', path.relative('C:\\Users\\Bluffing\\path.js', 'C:\\'));
 console.log('path.join():', path.join(__dirname, '..', '..', '/Users', '.', '/Bluffing'));
 console.log('path.resolve():', path.resolve(__dirname, '..', 'Users', '.', '/Bluffing'));
