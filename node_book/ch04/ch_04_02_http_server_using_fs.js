@@ -5,14 +5,13 @@ const server = http.createServer(async (req, res) => {
 	try {
 		
 		res.writeHead(200, { 'Content-Type' : 'text/html; charset=utf-8'});
-		const data = await fs.readFile('server2.html');
+		const data = await fs.readFile('server42.html');
 		res.end(data);
-	} catch (error) {
-		console.log(error);
+	} catch (err) {
+		console.error(err);
+		res.writeHead(500, {'Content-Type': 'text/plain; charset=utf-8' });
+		res.end(err.message);
 	}
-	// res.write('<h1>Hello Node!</h1>');
-	// res.write('<p>Hello server </p>');
-	// res.end('<p>Hello Jake </p>')
 })
 	.listen(8080); // 80번 포트는 보통 이미 쓰이고 있기에 error발생
 server.on('listening', () => {
