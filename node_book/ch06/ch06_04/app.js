@@ -14,7 +14,9 @@ app.set('port', process.env.PORT || 3000);
  */
 app.use( (req, res, next) => {
     console.log("# This is middle-ware, All of every request will be passed.")
+    // error는 내장객체
     next();
+    next(error);
 }
 // , (req, res, next) => {
 //     // console.log('# Second middle-ware in /about endpoint')
@@ -42,7 +44,14 @@ app.post('/', (req, res) => {
  * .status(STATUS_CODE)가 기본적으로 붙는다. 200은 default로 들어간다.
  */
 app.get('/catagory/Javascript', (req, res) => {
-    res.send('hello Javascript!');
+    try {
+        res.send('hello Javascript!');
+
+    } catch (error) {
+    // } catch {
+        next(error);
+        // throw new Error('something wrong');
+    }
 });
 
 app.get('/category/:name', (req, res) => {
@@ -63,14 +72,15 @@ app.get('/about', (req, res) => {
  * error 미들웨어가 아닌
  * 다른 status code값 처리 미들웨어
  */
-// app.use((req, res, next) => {
-//     res.status(404).send('## error in error handle middle-ware');
-// })
+app.use((req, res, next) => {
+    res.status(404).send('## error in e middle-ware');
+})
 /**
  * (err, req, res, next) 인자 개수를 맞추어야한다.
  * 실제 서비스에게는 사용자에게 에러 발생했다고 정도만 알려준다(상세정보 제외)
  * 서버에서만 자세하게 기록한다.
  */
+// Cannot /route 
 app.use((err, req, res, next) => {
     console.error(err);
     // status code masking, 원래는 500번대 에러이지만 해커들의 공격을 방어하기 위함
