@@ -2,39 +2,35 @@ const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-
+const session = require('express-session');
 const app = express();
 
 app.set('port', process.env.PORT || 3000);
 
-app.use(morgan('combined'));
-app.use('요청 경로', express.static('실제 경로'));
-app.use('/', express.static(__dirname, ''));
-app.use(cookieParser());
+app.use('/', express.static(__dirname, 'public'));
+app.use(morgan('dev'));
+app.use(cookieParser('jakepwd'));
+app.use(session({
+    resave:false,
+    saveUninitialized: false,
+    secret: 'jakepwd',
+    cookie: {
+        
+    }
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-/**
- * 요청경로와 실제 경로가 다르다
- * localhost:3000/jake.html
- * 실제 서버에서의 경로 /public/jake.html
- * localhost:3000/app.js
- * 실제 서버에서의 경로 /public/app.js
- * public은 유명하므로 다른 값을 넣는 것을 추천한다.
- * e.g) public-4242/jake.html
- * static route를 함으로써 요청 경로와 실제 경로가 다르게 되므로 보안에도 도움된다.
- * 미들웨어 간에도 순서가 많이 중요하다.
- */
-
-
-// app.use(express.static());
-
-
-/**
- * Static 정적파일을 보내주는 작업을 한다
- */
 app.get('/', (req, res, next) => {
-    req.body
+    /**
+     * 요청을 보낸사람의 id만 hello가 된다.
+     * 요청마다 개인의 저장공간을 만들어준다.
+     * 그것이 express-session.
+     */
+    req.session.id = 'hello';
+    // heap
+    // 가비지 컬랙터에 걸릴지 
+    // 메모리 누수가 날 수 있지는 않은지
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 /*
@@ -59,8 +55,6 @@ app.get('/', (req, res, next) => {
  * old way with 
  * app.use(express.json());
    app.use(express.urlencoded({ extended: true }));
- * 
-   
  */
 
 /**
