@@ -15,8 +15,12 @@ app.use(session({
     saveUninitialized: false,
     secret: 'jakepwd',
     cookie: {
-        
-    }
+        httpOnly: true, // true여야 JS로 공격을 받지 않는다? http로만 받아지니까 그런 것 같다
+    },
+    /**
+     * 서명되어 있으니 읽을 수 없는 문자열로 바뀌어 있다
+     */
+    name: 'connect.sid', // default value => connect.sid
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,29 +37,6 @@ app.get('/', (req, res, next) => {
     // 메모리 누수가 날 수 있지는 않은지
     res.sendFile(path.join(__dirname, 'index.html'));
 });
-/*
- * 위에 두줄의 코드를 씀으로써  아래처럼 길게 코드를 적을 필요가 없어졌다.
-    req.on('data', (data) => {
-        body += data;
-    });
-    return req.on('end', () => {
-        console.log('PUT content(body):', body);
-        const { name } = JSON.parse(body).name;
-        users[key] = JSON.parse(body).name;
-        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8'});
-        return res.end(JSON.stringify(users));
-    });
-*/
-// app.use('/', (req, res, next) => {
-//     console.log('1 요청에 실행');
-// 	next();
-// });
-
-/**
- * old way with 
- * app.use(express.json());
-   app.use(express.urlencoded({ extended: true }));
- */
 
 /**
  * Add cookie parser
