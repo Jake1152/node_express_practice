@@ -7,7 +7,6 @@ const app = express();
 
 app.set('port', process.env.PORT || 3000);
 
-app.use('/', express.static(__dirname, 'public'));
 app.use(morgan('dev'));
 app.use(cookieParser('jakepwd'));
 app.use(session({
@@ -22,21 +21,39 @@ app.use(session({
      */
     name: 'connect.sid', // default value => connect.sid
 }));
+
+/**
+ * express-static을 다른 곳에 넣는다고 했을때
+ * 로그인 한 사람한테만 특정 자원을 제공한다고 할때
+ *  e.g) 구글 드라이브, 등 공유자원, 
+ * 미들웨어 속에 미들웨어를 넣는 식으로 처리할 수 있다.
+ */
+// AS IS
+app.use('/', express.static(__dirname, 'public'));
+// TD BE 미들웨어 확장, cors, passport 미들웨어 쓸때에도 미들웨어 확장법을 쓰게된다.
+app.use('/', (req, res, next) => {
+    // login한 경우
+    if (req,sessino.id) { 
+        express.static(__dirname, 'public');
+    } else {
+        next();
+    }
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req, res, next) => {
-    /**
-     * 요청을 보낸사람의 id만 hello가 된다.
-     * 요청마다 개인의 저장공간을 만들어준다.
-     * 그것이 express-session.
-     */
-    req.session.id = 'hello';
-    // heap
-    // 가비지 컬랙터에 걸릴지 
-    // 메모리 누수가 날 수 있지는 않은지
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
+// app.get('/', (req, res, next) => {
+//     /**
+//      * 요청을 보낸사람의 id만 hello가 된다.
+//      * 요청마다 개인의 저장공간을 만들어준다.
+//      * 그것이 express-session.
+//      */
+//     req.session.id = 'hello';
+//     // heap
+//     // 가비지 컬랙터에 걸릴지 
+//     // 메모리 누수가 날 수 있지는 않은지
+//     res.sendFile(path.join(__dirname, 'index.html'));
+// });
 
 /**
  * Add cookie parser
