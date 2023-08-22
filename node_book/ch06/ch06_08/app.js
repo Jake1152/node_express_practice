@@ -8,6 +8,7 @@ const app = express();
 app.set('port', process.env.PORT || 3000);
 
 app.use(morgan('dev'));
+
 app.use(cookieParser('jakepwd'));
 app.use(session({
     resave:false,
@@ -27,6 +28,7 @@ app.use(session({
  * 로그인 한 사람한테만 특정 자원을 제공한다고 할때
  *  e.g) 구글 드라이브, 등 공유자원, 
  * 미들웨어 속에 미들웨어를 넣는 식으로 처리할 수 있다.
+ * Cors, passport
  */
 // AS IS
 app.use('/', express.static(__dirname, 'public'));
