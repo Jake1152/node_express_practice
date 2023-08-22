@@ -57,8 +57,19 @@ app.get('/upload', (req, res) => {
  */
 // app.post('/upload', upload.single('image'), (req, res) => {
 /** array() 여러개 파일 전송*/
-app.post('/upload', upload.array('image'), (req, res) => {
-    console.log(req.files);
+// app.post('/upload', upload.array('image'), (req, res) => {
+/** fields() 여러개 다름 html name tag의 파일 전송*/
+app.post('/upload', upload.fields([{ name: 'image1' }, 
+                                    { name: 'image2' }, 
+                                    { name: 'image3' }]), (req, res) => {
+    // single
+    // console.log(req.files.image);  
+    // array
+    // console.log(req.files.image1);  
+    // fields
+    console.log(req.files.image1);
+    console.log(req.files.image2);
+    console.log(req.files.image3);
     res.send('ok');
 });
 
