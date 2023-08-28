@@ -7,14 +7,16 @@ const session = require('express-session');
 
 dotenv.config();
 const router = express.Router();
-// const indexRouter = require('./routes');
-// const userRouter = require('./routes/user');
+const indexRouter = require('./routes');
+const userRouter = require('./routes/user');
 
 const app = express();
 
 app.set('port', process.env.PORT || 3000);
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('views engine', 'pug');
+// views 디렉토리 지정
+app.set('views', path.join(__dirname, 'views'));
+// 디렉터리 안에 pug라는 확장자 선택
+app.set('views engine', 'pug');
 
 app.use(morgan('dev'));
 // app.use('/', express.static(path.join(__dirname, 'public')));
