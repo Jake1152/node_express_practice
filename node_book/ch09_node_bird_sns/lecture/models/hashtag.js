@@ -25,7 +25,9 @@ class Hastag extends Sequelize.Modal {
     })
   }
 
-  static associate(db) {}
+  static associate(db) {
+    db.Hashtag.belongToMany(db.post, { through: 'PostHashtag'});
+  }
 }
 
 module.exports = Hastag;

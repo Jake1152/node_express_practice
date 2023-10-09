@@ -5,6 +5,7 @@ const path = require("path");
 const session = require("express-session");
 const nunjucks = require("nunjucks");
 const dotenv = require("dotenv");
+const { sequelize } = require("./models");
 
 // process.env.COOKIE_SECERT없음
 dotenv.config(); // process.env

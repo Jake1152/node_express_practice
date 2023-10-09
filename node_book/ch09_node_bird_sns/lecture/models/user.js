@@ -45,7 +45,19 @@ class User extends Sequelize.Modal {
     })
   }
 
-  static associate(db) {}
+  static associate(db) {
+    db.User.hasMasy(db.Post);
+    db.User.belongsToMany(db.User, {
+      foreignKey: 'followingId',
+      as: 'Followers',
+      through: 'Follow'
+    })
+    db.User.belongsToMany(db.User, {
+      foreignKey: 'followId',
+      as: 'Followings',
+      through: 'Follow'
+    })
+  }
 }
 
 module.exports = User;
