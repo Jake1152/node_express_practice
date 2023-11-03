@@ -4,6 +4,9 @@ const morgan = require("morgan");
 const nunjucks = require("nunjucks");
 
 const { sequelize } = require("./models");
+// const indexRouter = require("./routes");
+// const usersRouter = require("./routes/users");
+// const commentsRouter = require("./models/comments");
 
 const app = express();
 app.set("port", process.env.PORT || 3001);
@@ -15,20 +18,50 @@ nunjucks.configure("views", {
 
 /**
  * sync를 해야 연결이 된다
+ * node to mysql
  */
 sequelize
   .sync({ force: false })
   .then(() => {
-    console.log("데이터베이스 연결 성공");
+    console.log("## 데이터베이스 연결 성공");
   })
   .catch((err) => {
     console.error(err);
   });
 
+// sequelize.lo
+// sequelize.close(() => {
+//   console.log("## 데이터베이스 연결 종료");
+// });
+/**
+ * You can use the .authenticate() function to test if the connection is OK
+ * 왜 await가 붙는가?
+ */
+// try {
+//   await sequelize.authenticate();
+//   console.log('Connection has been established successfully.');
+// } catch (error) {
+//   console.error('Unable to connect to the database:', error);
+// }
+
+// async () => {
+//   console.log(" ## Connection has been established successfully.");
+//   try {
+//     await sequelize.authenticate();
+//   } catch (error) {
+//   }
+// };
+
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(express.urlencoded({ extended: false }));
+
+// app.use("/", indexRouter);
+// app.use("/users", usersRouter);
+// app.use("/comments", commentsRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);

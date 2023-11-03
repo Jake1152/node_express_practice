@@ -1,35 +1,34 @@
 const Sequelize = require("sequelize");
 
-/**
- * 모델의 기본 구성
- * 1. class 생성 with extends Modal
- * 2. initiate(table 정보), associate(table 관계)
- *
- */
-class Post extends Sequelize.Modal {
+class Post extends Sequelize.Model {
   static initiate(sequelize) {
-    Post.init({
-      content: {
-        type: Sequelize.STRING(140),
-        allowNul: false,
+    Post.init(
+      {
+        content: {
+          type: Sequelize.STRING(140),
+          allowNull: false,
+        },
+        img: {
+          type: Sequelize.STRING(200),
+          allowNull: true,
+        },
       },
-      img: {
-        type: Sequelize.STRING(200),
-        allowNull: true,
-      }, {
+      {
         sequelize,
         timestamps: true,
         underscored: false,
+        modelName: "Post",
+        tableName: "posts",
         paranoid: false,
-        modelName: 'Post',
-        tableName: 'posts',
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_general_ci',
-      })
+        charset: "utf8mb4",
+        collate: "utf8mb4_general_ci",
+      }
+    );
   }
+
   static associate(db) {
     db.Post.belongsTo(db.User);
-    db.Post.belongsToMany(db.Hash, { through: 'PostHashtag'})
+    db.Post.belongsToMany(db.Hashtag, { through: "PostHashtag" });
   }
 }
 

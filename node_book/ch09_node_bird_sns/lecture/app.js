@@ -12,6 +12,7 @@ dotenv.config(); // process.env
 console.log("PORT:", process.env.PORT);
 // process.env.COOKIE_SECERT있음
 const pageRouter = require("./routes/page");
+// const passportConfig = require("./passport");
 
 const app = express();
 app.set("port", process.env.PORT || 4242);
@@ -21,6 +22,15 @@ nunjucks.configure("views", {
   express: app,
   match: true,
 });
+
+sequelize
+  .sync({ force: false })
+  .then(() => {
+    console.log("데이터베이스 연결 성공");
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 app.use(morgan("combined")); // 로깅해줌
 // 로그 용량을 많이 차자함, 개발할때만 많이 나오게 설정
@@ -45,6 +55,9 @@ app.use(
     },
   })
 );
+
+// app.use(passport.initalize());
+// app.use(passport.session()); // connect.sid 라는 이름으로 세션 쿠기가 브라우저로 전송
 
 app.use("/", pageRouter);
 app.use((req, res, next) => {
