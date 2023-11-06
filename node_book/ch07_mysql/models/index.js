@@ -1,4 +1,6 @@
 const Sequelize = require("sequelize");
+const User = require("./user");
+const Comment = require("./comment");
 
 const env = process.NODE_ENV || "development";
 const config = require("../config/config")[env];
@@ -11,7 +13,18 @@ const sequelize = new Sequelize(
   config
 );
 
+/**
+ * sequelize는 연결객체이다
+ */
 db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+
+db.User = User;
+db.Comment = Comment;
+
+User.initiate(sequelize);
+Comment.initiate(sequelize);
+
+User.associate(db);
+Comment.associate(db);
 
 module.exports = db;

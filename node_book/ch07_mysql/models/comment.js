@@ -15,7 +15,7 @@ class Comment extends Sequelize.Model {
         },
       },
       {
-        sequelize,
+        sequelize, // 연결객체, model과 DBMS를 연결시켜준다.
         timestamps: false,
         modelName: "Comment",
         tableName: "comments",
