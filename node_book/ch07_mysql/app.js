@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const nunjucks = require("nunjucks");
 
 const { sequelize } = require("./models");
-// const indexRouter = require("./routes");
+const indexRouter = require("./routes");
 // const usersRouter = require("./routes/users");
 // const commentsRouter = require("./models/comments");
 
@@ -59,7 +59,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.urlencoded({ extended: false }));
 
-// app.use("/", indexRouter);
+app.use("/", indexRouter);
 // app.use("/users", usersRouter);
 // app.use("/comments", commentsRouter);
 

@@ -6,7 +6,7 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   try {
     const users = await User.findAll();
-    res.render("sequelize", { users });
+    res.render("sequelize", { users }); //sequelize.html을 가져오게 만듦
   } catch (err) {
     console.error(err);
     next(err);
@@ -15,8 +15,6 @@ router.get("/", async (req, res, next) => {
 
 module.exports = router;
 /** 
-const express = require("express");
-const router = express.Router();
 
 // GET / 라우터
 router.get("/", (req, res) => {
