@@ -40,7 +40,9 @@ class User extends Sequelize.Model {
         },
       },
       // createAt, updatedAt, deletedAt
+      // snake_case CamelCase
       /**
+       * # paranoid
        * 회원 정보를 오래 가지고 있어야한다
        * 완전히 삭제는 힘들 수 있다, 몇년이내 복구 요청가능하므로.
        * 그럴때 soft delete로 deletedAt을 쓸 수 있다
@@ -52,7 +54,7 @@ class User extends Sequelize.Model {
         underscored: false, // sequelize에서 자동 설정해주는 key에 대한 제약조건이다.
         modelName: "User", // Model    Company JS side naming
         tableName: "users", // models  companies DB side naming
-        paranoid: false,
+        paranoid: false,  // 소프트삭제
         charset: "utf8",
         collate: "utf8_general_ci", // 이모티콘도 사용 가능해짐
       }
