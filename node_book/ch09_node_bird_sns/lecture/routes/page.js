@@ -11,7 +11,7 @@ router.use((req, res, next) => {
   res.locals.followerCount = 0;
   res.locals.followingCount = 0;
   res.locals.followingIdList = {};
-  next();
+  next(); // next() 뺴먹기 쉬우므로 주의!
 });
 
 router.get("/profile", renderProfile);
