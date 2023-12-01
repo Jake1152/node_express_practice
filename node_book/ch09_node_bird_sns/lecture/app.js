@@ -5,6 +5,7 @@ const path = require("path");
 const session = require("express-session");
 const nunjucks = require("nunjucks");
 const dotenv = require("dotenv");
+const { sequelize } = require("./models");
 
 // 실행순서 중요, dotenv.config()를 해야 .env를 읽어서 process.env에 담긴다
 dotenv.config(); // process.env
@@ -17,6 +18,17 @@ nunjucks.configure("views", {
   express: app,
   watch: true,
 });
+
+// 혹시나 개발할때 테이블을 잘못 만들었다면
+// sync(force: true)를 하면 이전 테이블을 날리고 새롭게 만들게된다.
+sequelize
+  .sync({ force: false })
+  .then(() => {
+    console.log("데이터베이스 연결 성공");
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 app.use(morgan("dev")); // 배포시에는 'conbined', dev하면 자세하게 나오지만 서비스 시에 자세히 나오면 log가 많아서 비용이 커짐
 app.use(express.static(path.join(__dirname, "public")));
