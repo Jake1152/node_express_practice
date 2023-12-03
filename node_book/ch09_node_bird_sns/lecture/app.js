@@ -5,13 +5,17 @@ const path = require("path");
 const session = require("express-session");
 const nunjucks = require("nunjucks");
 const dotenv = require("dotenv");
+const passport = require("passport");
 const { sequelize } = require("./models");
 
 // 실행순서 중요, dotenv.config()를 해야 .env를 읽어서 process.env에 담긴다
 dotenv.config(); // process.env
 const pageRouter = require("./routes/page");
+const authRouter = require("./routes/auth");
+const passportConfig = require("./passport");
 
 const app = express();
+passportConfig();
 app.set("port", process.env.PORT || 4242);
 app.set("view engine", "html");
 nunjucks.configure("views", {
@@ -34,8 +38,8 @@ app.use(morgan("dev")); // 배포시에는 'conbined', dev하면 자세하게 �
 app.use(express.static(path.join(__dirname, "public")));
 // 보안상의 이슈로 public만 접근 가능하게하고 나머지는 접근 못하게 만듦
 // public을 static으로 설정
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json()); // req.body를 ajax json요청으로부터 생성
+app.use(express.urlencoded({ extended: false })); // req.body 폼으로부터 생성
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
   session({
@@ -48,8 +52,18 @@ app.use(
     },
   })
 );
+// passport middle-ware
+/**
+ * 반드시 express session 밑에다가 해야한다고 한다
+ * 왜?
+ * passport.session에서 express session을 쓰므로 미리 express session을 정읭해야한다
+ */
+app.use(passport.initialize()); // req.user, req.login, req.isAuthenticate, req.logout
+app.use(passport.session()); // session으로 저장 connect.sid라는 이름으로 세션 쿠키가 브라우저로 전송
+// 이로써 로그인 완료됨
 
 app.use("/", pageRouter);
+app.use("/auth", authRouter);
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${res.url} 라우터가 없습니다`);
   error.status = 404;
