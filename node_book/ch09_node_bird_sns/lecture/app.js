@@ -61,6 +61,15 @@ app.use(
 app.use(passport.initialize()); // req.user, req.login, req.isAuthenticate, req.logout
 app.use(passport.session()); // session으로 저장 connect.sid라는 이름으로 세션 쿠키가 브라우저로 전송
 // 이로써 로그인 완료됨
+// 브라우저 connext.sid=23443543543 처럼 저장됨
+/**
+ * 이 이후부터는 쿠키가 저장되면 다음 리턴부터는 쿠키가 같이 전송된다.
+ * 23443543543이 서버로 온다
+ * 쿠키 파서가 분석을 한다
+ * connect.sid를 쿠카퍼서 역할
+ * 객체로 만들어준다
+ * passport에서  세션쿠키를 이용해서 { 세션쿠키: 유저아이디}객체를 찾는다
+ */
 
 app.use("/", pageRouter);
 app.use("/auth", authRouter);

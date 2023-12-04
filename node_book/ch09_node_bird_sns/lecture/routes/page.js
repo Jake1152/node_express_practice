@@ -7,6 +7,9 @@ const {
 } = require("../controllers/page");
 const { isLoggedIn, isNotLoggedIn } = require("../middlewares");
 
+/**
+ * 로그인 여부에 따라서 req.user가 null이거나 값이 있거나 달라진다
+ */
 router.use((req, res, next) => {
   // res.locals.user = null;
   res.locals.user = req.user;
