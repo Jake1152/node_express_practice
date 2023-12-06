@@ -14,7 +14,7 @@ module.exports = router;
 
 // After
 const express = require("express");
-const passprot = require("passport");
+const passport = require("passport");
 const { isLoggedIn, isNotLoggedIn } = require("../middlewares");
 const { join, login, logout } = require("../controllers/auth");
 const router = express.Router();
