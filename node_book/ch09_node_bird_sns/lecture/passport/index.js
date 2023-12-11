@@ -37,4 +37,5 @@ module.exports = () => {
   });
 
   local(); // routes에서 local이 있으면 이 부분이 호출된다.
+  kakao();
 };

@@ -53,6 +53,16 @@ exports.login = (req, res, next) => {
   })(req, res, next); //  이 부분까지 적으면 미들웨어 확장패턴이라 한다
 };
 
+// 미들웨어 기본기능만 쓰는 경우
+// app.use(passport.authenticate("kakao"));
+
+// 미들웨어 확장패턴을 쓰고자 하는 경우
+/**
+ * 강의에서는 미들웨어에서 (req, res, next)를 쓰기위해 미들웨어 확장패턴을 썼다고 보면 된다.
+ * 10장
+ */
+// app.use((req, res, next) => passport.authenticate("kakao")(req, res, next));
+
 /**
  * 로그아웃은 세션 쿠키를 제거함
  * 브라우저에서 connect.sid 쿠키값이 남아있더라도

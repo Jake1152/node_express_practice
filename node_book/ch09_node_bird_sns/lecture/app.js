@@ -50,7 +50,7 @@ app.use(
       httpOnly: true,
       secure: false, // https로 바꿀때는 true로 변경
     },
-  })
+  }),
 );
 // passport middle-ware
 /**

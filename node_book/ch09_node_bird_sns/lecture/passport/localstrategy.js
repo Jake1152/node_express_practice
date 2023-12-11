@@ -44,7 +44,7 @@ module.exports = () => {
           console.error(error);
           done(error);
         }
-      }
-    )
+      },
+    ),
   );
 };
