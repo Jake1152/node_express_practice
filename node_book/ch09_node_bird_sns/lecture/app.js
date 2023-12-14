@@ -12,6 +12,7 @@ const { sequelize } = require("./models");
 dotenv.config(); // process.env
 const pageRouter = require("./routes/page");
 const authRouter = require("./routes/auth");
+const postRouter = require("./routes/post");
 const passportConfig = require("./passport");
 
 const app = express();
@@ -36,6 +37,8 @@ sequelize
 
 app.use(morgan("dev")); // 배포시에는 'conbined', dev하면 자세하게 나오지만 서비스 시에 자세히 나오면 log가 많아서 비용이 커짐
 app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "uploads")));
+app.use("/img", express.static(path.join(__dirname, "uploads")));
 // 보안상의 이슈로 public만 접근 가능하게하고 나머지는 접근 못하게 만듦
 // public을 static으로 설정
 app.use(express.json()); // req.body를 ajax json요청으로부터 생성
@@ -73,6 +76,8 @@ app.use(passport.session()); // session으로 저장 connect.sid라는 이름으
 
 app.use("/", pageRouter);
 app.use("/auth", authRouter);
+app.use("/post", postRouter);
+
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${res.url} 라우터가 없습니다`);
   error.status = 404;
