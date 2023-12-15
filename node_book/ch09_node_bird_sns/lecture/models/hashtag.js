@@ -14,12 +14,12 @@ class Hashtag extends Sequelize.Model {
         sequelize,
         timestamps: true,
         underscored: false,
-        modelName: "Post",
-        tableName: "posts",
+        modelName: "Hashtag",
+        tableName: "hashtag",
         paranoid: false,
         charset: "utf8mb4",
         collate: "utf8mb4_general_ci",
-      }
+      },
     );
   }
 
