@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { isLoggedIn, isNotLoggedIn } = require("../middlewares/");
 const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
+const { isLoggedIn, isNotLoggedIn } = require("../middlewares/");
 const { afterUploadImage, uploadPost } = require("../controllers/post");
 
 /**

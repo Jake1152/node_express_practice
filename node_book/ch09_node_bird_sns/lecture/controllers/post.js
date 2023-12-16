@@ -30,20 +30,20 @@ exports.uploadPost = async (req, res, next) => {
     if (hashtags) {
       const result = await Promise.all(
         hashtags.map((tag) => {
-          console.log("#tag : ", tag);
+          // console.log("#tag : ", tag);
           // 디비와 연결해서 값을 받아오고 이후 코드를 진행해야하니까 await을 붙여주어야 처리된다.
           // Hashtag.~~ 부분이 promise이다
           // map()을 썼으니 배열이고 그 안에 값들은 promise이므로
           // .map()의 결과는 promise 배열이다
           const slicedTag = tag.slice(1).toLowerCase();
-          console.log("## tag.slice(1).toLowerCase() :", slicedTag);
-          console.log(
-            "## slicedTag ? slicedTag : #test :",
-            slicedTag ? slicedTag : "#test",
-          );
+          // console.log("## tag.slice(1).toLowerCase() :", slicedTag);
+          // console.log(
+          //   "## slicedTag ? slicedTag : #test :",
+          //   slicedTag ? slicedTag : "#test",
+          // );
 
           return Hashtag.findOrCreate({
-            where: { title: slicedTag ? slicedTag : "#test" },
+            where: { title: slicedTag },
           });
         }),
       );
@@ -51,9 +51,8 @@ exports.uploadPost = async (req, res, next) => {
       // hashtag와 post와 서로 이어준다.
       // post, hashtag 다대다 관계가 아래와 같이 생긴다
       await post.addHashtags(result.map((r) => r[0]));
-    } else {
-      console.log("#hashtags : ", hashtags);
     }
+    res.redirect("/");
   } catch (error) {
     console.error(error);
     next(error);

@@ -15,7 +15,8 @@ router.use((req, res, next) => {
   res.locals.user = req.user;
   res.locals.followerCount = 0;
   res.locals.followingCount = 0;
-  res.locals.followingIdList = {};
+  res.locals.followingIdList = []; // debug version
+  // res.locals.followingIdList = {}; // error
   next(); // next() 뺴먹기 쉬우므로 주의!
 });
 
