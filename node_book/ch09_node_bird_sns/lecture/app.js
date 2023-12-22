@@ -13,6 +13,7 @@ dotenv.config(); // process.env
 const pageRouter = require("./routes/page");
 const authRouter = require("./routes/auth");
 const postRouter = require("./routes/post");
+const userRouter = require("./routes/user");
 const passportConfig = require("./passport");
 
 const app = express();
@@ -78,6 +79,7 @@ app.use(passport.session()); // session으로 저장 connect.sid라는 이름으
 app.use("/", pageRouter);
 app.use("/auth", authRouter);
 app.use("/post", postRouter);
+app.use("/user", userRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${res.url} 라우터가 없습니다`);

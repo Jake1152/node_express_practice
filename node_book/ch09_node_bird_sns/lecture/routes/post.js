@@ -3,6 +3,7 @@ const router = express.Router();
 const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
+
 const { isLoggedIn, isNotLoggedIn } = require("../middlewares/");
 const { afterUploadImage, uploadPost } = require("../controllers/post");
 
@@ -24,8 +25,7 @@ const upload = multer({
   storage: multer.diskStorage({
     // 두번째 인수에 값이 들어가는 이유?
     destination(req, file, cb) {
-      //   console.log("req: ", req);
-      console.log("file: ", file);
+      // console.log("file: ", file);
       cb(null, "uploads/");
     },
     /**
@@ -35,7 +35,7 @@ const upload = multer({
      */
     filename(req, file, cb) {
       //   console.log("req: ", req);
-      console.log("file: ", file);
+      // console.log("file: ", file);
       const ext = path.extname(file.originalname); // 이미지.png => 이미지123234435.png
       // 이름만 떼어주기 path.basename() 이용!
       cb(null, path.basename(file.originalname, ext) + Date.now() + ext);

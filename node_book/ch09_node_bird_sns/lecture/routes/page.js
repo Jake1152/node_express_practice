@@ -13,9 +13,10 @@ const { isLoggedIn, isNotLoggedIn } = require("../middlewares");
 router.use((req, res, next) => {
   // res.locals.user = null;
   res.locals.user = req.user;
-  res.locals.followerCount = 0;
-  res.locals.followingCount = 0;
-  res.locals.followingIdList = []; // debug version
+  res.locals.followerCount = req.user?.Followers?.length || 0;
+  res.locals.followingCount = req.user?.Followings?.length || 0;
+  res.locals.followingIdList = req.user?.Followings?.map((f) => f.id) || []; // debug version
+  // res.locals.followingIdList = []; // debug version
   // res.locals.followingIdList = {}; // error
   next(); // next() 뺴먹기 쉬우므로 주의!
 });

@@ -36,7 +36,7 @@ class User extends Sequelize.Model {
         paranoid: true,
         charset: "utf8",
         collate: "utf8_general_ci",
-      }
+      },
     );
   }
 
