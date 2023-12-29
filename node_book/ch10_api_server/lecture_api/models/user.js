@@ -36,7 +36,7 @@ class User extends Sequelize.Model {
         paranoid: true,
         charset: "utf8",
         collate: "utf8_general_ci",
-      },
+      }
     );
   }
 
@@ -54,6 +54,8 @@ class User extends Sequelize.Model {
       //           delete
       through: "Follow",
     });
+    // 사용자는 도메인을 생성할 수 있다. 또한, 여려개 만들 수 있다.
+    db.User.hasMany(db.Domain);
   }
 }
 
