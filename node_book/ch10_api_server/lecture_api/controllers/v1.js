@@ -1,19 +1,20 @@
+const jwt = require("jsonwebtoken");
 const { Domain, User } = require("../models");
 /**
  * 토큰 발급에는  req.body에 아까 발급받은 client secret을 통해서 jwt을
  */
 exports.createToken = async (req, res) => {
+  // const clientSecret = req.body.clientSecret || null;
   const { clientSecret } = req.body;
+  // console.log(`#clientSecret: ${clientSecret}`);
   try {
     const domain = await Domain.findOne({
       where: { clientSecret },
       // domain 소유자 찾기
-      include: [
-        {
-          model: User,
-          attributes: ["id", "nick"],
-        },
-      ],
+      include: {
+        model: User,
+        attributes: ["nick", "id"],
+      },
     });
     if (!domain) {
       return res.status(401).json({
@@ -33,7 +34,7 @@ exports.createToken = async (req, res) => {
         nick: domain.User.nick,
       },
       process.env.JWT_SECRET,
-      { expiredIn: "1m", issuer: "nodebird" }
+      { expiresIn: "1m", issuer: "nodebird" }
     );
     return res.status(200).json({
       code: 200,
@@ -42,13 +43,10 @@ exports.createToken = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return (
-      res.status(500),
-      json({
-        code: 500,
-        message: "Server error.",
-      })
-    );
+    return res.status(500).json({
+      code: 500,
+      message: "Server error.",
+    });
   }
 };
 
