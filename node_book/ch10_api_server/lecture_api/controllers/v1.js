@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const { Domain, User } = require("../models");
+const { Domain, User, Post, Hashtag } = require("../models");
+// const { renderHashtag } = require("../../lecture/controllers/page");
 /**
  * 토큰 발급에는  req.body에 아까 발급받은 client secret을 통해서 jwt을
  */
@@ -55,4 +56,71 @@ exports.createToken = async (req, res) => {
  */
 exports.tokenTest = async (req, res) => {
   res.json(res.locals.decoded);
+};
+
+// Promise 이용하여 처리
+/**
+ * post를 가져온다.
+ * DB에 접근하여 가져와야함
+ * 가져오기 위해서는 id가 필요
+ */
+exports.getMyPosts = (req, res) => {
+  try {
+    const posts = Post.findAll({
+      // where: { userId: req.body?.id },
+      // verify token에서 쓰였다
+      where: { userId: req.locals.decoded.id },
+      // include: { model: Post, attributes: ["PostId"] },
+    })
+      .then((posts) => {
+        res.json({
+          code: 200,
+          payload: posts,
+        });
+      })
+      .catch((error) => {
+        return res.status(500).json({
+          code: 500,
+          message: "server error",
+        });
+      });
+    if (!posts) {
+      return;
+    }
+  } catch (err) {}
+};
+
+exports.getPostsByHashtag = async (req, res) => {
+  // const post = finc;
+  try {
+    // 왜 params인가?
+    // router.get("/posts/hashtag/:title", verifyToken, getPostsByHashtag);
+    // /posts/hashtag/:title에 title이 들어있을 것이므로 그렇다
+    const hashtag = await Hashtag.findOne({
+      where: { title: req.params.title },
+    });
+    if (!hashtag)
+      return res.status(404).json({
+        code: 404,
+        message: `No results for ${req.params.title}`,
+      });
+    const posts = await hashtag.getPosts();
+    if (posts.length === 0) {
+      return res.status(404).json({
+        code: 404,
+        message: `No results for ${req.params.title}`,
+      });
+    }
+    if (posts)
+      return res.json({
+        code: 200,
+        payloads: posts,
+      });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      code: 500,
+      message: "Server error",
+    });
+  }
 };
