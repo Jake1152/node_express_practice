@@ -1,6 +1,10 @@
 const { User, Domain } = require("../models");
 const { v4: uuidv4 } = require("uuid");
 
+
+/**
+ * 세션에 토큰 저장
+ */
 exports.renderLogin = async (req, res, next) => {
   try {
     const user = await User.findOne({

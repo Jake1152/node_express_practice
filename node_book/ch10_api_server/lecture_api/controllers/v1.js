@@ -35,7 +35,7 @@ exports.createToken = async (req, res) => {
         nick: domain.User.nick,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1m", issuer: "nodebird" }
+      { expiresIn: "10m", issuer: "nodebird" }
     );
     return res.status(200).json({
       code: 200,
@@ -66,13 +66,14 @@ exports.tokenTest = async (req, res) => {
  */
 exports.getMyPosts = (req, res) => {
   try {
-    const posts = Post.findAll({
+    Post.findAll({
       // where: { userId: req.body?.id },
       // verify token에서 쓰였다
       where: { userId: req.locals.decoded.id },
       // include: { model: Post, attributes: ["PostId"] },
     })
       .then((posts) => {
+        console.log(posts)
         res.json({
           code: 200,
           payload: posts,
