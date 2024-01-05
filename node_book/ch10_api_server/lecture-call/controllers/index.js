@@ -26,14 +26,39 @@ const request = async (req, api) => {
       // session에 토큰이 없으면 발급 신청한다.
       req.session.jwt = tokenResult.data.token;
     }
-    console.log(`#req.session.jwt : ${req.session.jwt }`)
+    // console.log(`#req.session.jwt : ${req.session.jwt}`);
     /**
      * 실제 api요청을 보낸다
      */
-    console.log(`URL API : ${URL}${api}`)
+    console.log(`URL API : ${URL}${api}`);
+    /**
+     * axios.get()
+     * fetch()는 왜 안되었는가?
+     *
+     * await으로 요청을 하였고
+     * 응답 주는 쪽에서 응답을 안주니까
+     * 계속 요청한다
+     * 만들 수 있는 소켓을 전부 소비하여서
+     * read conneciton error가 발생
+     */
     return await axios.get(`${URL}${api}`, {
-      headers: { authorization: req.session.jwt }
+      headers: { authorization: req.session.jwt },
     });
+    // const response = await fetch(`${URL}${api}`, {
+    //   method: "GET",
+    //   headers: {
+    //     authorization: req.session.jwt,
+    //     "Content-Type": "application/json", // Add other headers if needed
+    //   },
+    // });
+
+    // // Handle the response as needed
+    // if (!response.ok) {
+    //   throw new Error(`Request failed with status: ${response.status}`);
+    // }
+
+    // const data = await response.json();
+    // return data;
   } catch (error) {
     console.error(error);
     // 유효기간 지났는지 확인
@@ -67,7 +92,10 @@ exports.getMyPosts = async (req, res, next) => {
 
 exports.searchByHashtag = async (req, res, next) => {
   try {
-    const result = await request(req, `/posts/hashtag/${encodeURIComponent(req.params.hashtag)}`);
+    const result = await request(
+      req,
+      `/posts/hashtag/${encodeURIComponent(req.params.hashtag)}`
+    );
     return res.json(result.data);
   } catch (error) {
     console.error(error);

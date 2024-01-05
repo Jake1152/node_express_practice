@@ -15,7 +15,7 @@ const router = express.Router();
  * req.body.clientSecret
  */
 router.post("/token", createToken);
-router.get("/test", verifyToken, tokenTest);
+// router.get("/test", verifyToken, tokenTest);
 
 router.get("/posts/my", verifyToken, getMyPosts);
 router.get("/posts/hashtag/:title", verifyToken, getPostsByHashtag);

@@ -63,17 +63,22 @@ exports.tokenTest = async (req, res) => {
  * post를 가져온다.
  * DB에 접근하여 가져와야함
  * 가져오기 위해서는 id가 필요
+ * await 으로 요청
+ * await 비동기 이후에 리턴하지만 끝
  */
 exports.getMyPosts = (req, res) => {
   try {
-    Post.findAll({
+    console.log("## exports.getMyPosts ");
+    const posts = Post.findAll({
       // where: { userId: req.body?.id },
       // verify token에서 쓰였다
-      where: { userId: req.locals.decoded.id },
+      where: { userId: res?.locals?.decoded?.id },
+      // res로 적어야하지만 req로 적었어서 undefined였으므로 문제 발생
+      //   where: { userId: req.locals.decoded.id }, req로 잘못 적어서 에러
       // include: { model: Post, attributes: ["PostId"] },
     })
       .then((posts) => {
-        console.log(posts)
+        console.log(posts);
         res.json({
           code: 200,
           payload: posts,
@@ -86,10 +91,29 @@ exports.getMyPosts = (req, res) => {
         });
       });
     if (!posts) {
+      console.log("# posts is empty");
       return;
     }
   } catch (err) {}
 };
+
+// exports.getMyPosts = (req, res) => {
+//   Post.findAll({ where: { userId: res.locals.decoded.id } })
+//     .then((posts) => {
+//       console.log("## posts ", posts);
+//       res.json({
+//         code: 200,
+//         payload: posts,
+//       });
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//       return res.status(500).json({
+//         code: 500,
+//         message: "서버 에러",
+//       });
+//     });
+// };
 
 exports.getPostsByHashtag = async (req, res) => {
   // const post = finc;

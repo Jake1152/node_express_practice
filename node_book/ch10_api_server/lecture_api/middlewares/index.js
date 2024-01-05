@@ -26,6 +26,7 @@ exports.isNotLoggedIn = (req, res, next) => {
 
 exports.verifyToken = (req, res, next) => {
   try {
+    console.log("# exports.verifyToken");
     // token이 들어있는 위치 req.headers.authorization
     // token이 꼭 이 위치에 들어 있는 것은 아니다
     // 개발자가 사용자한테 토큰을 이 객체의 이 프로퍼티에 넣으라고 할 수 있다.

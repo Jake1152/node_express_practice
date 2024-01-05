@@ -6,6 +6,6 @@ const router = express.Router();
 router.get("/test", test);
 
 router.get("/myposts", getMyPosts);
-router.get("/search/hashtag/:title", searchByHashtag);
+router.get("/search/:title", searchByHashtag);
 
 module.exports = router;
