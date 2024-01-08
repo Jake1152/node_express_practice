@@ -1,0 +1,26 @@
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <!-- single option -->
+    <!-- <input type="file" name="image" /> -->
+    <!-- array option -->
+    <!-- <input type="file" name="image" multiple/>
+    <input type="file" name="image" />
+    <input type="file" name="image" /> -->
+    <!-- fields option -->
+    <input type="file" name="image1" />
+    <input type="file" name="image2" />
+    <input type="file" name="image3" />
+    <input type="text" name="title" />
+    <button type="submit">업로드</button>
+</form>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    document.getElementById('form').addEventListner('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('image1', e.target.image.files[0])
+        formData.append('image2', e.target.image.files[1])
+        formData.append('image3', e.target.image.files[2])
+        formData.append('title', e.target.title.value)
+        axios.post('/upload', formData);
+    });
+</script>
