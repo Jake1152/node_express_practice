@@ -125,14 +125,14 @@ exports.getPostsByHashtag = async (req, res) => {
       where: { title: req.params.title },
     });
     if (!hashtag)
-      return res.status(404).json({
-        code: 404,
+      return res.status(200).json({
+        code: 200,
         message: `No results for ${req.params.title}`,
       });
     const posts = await hashtag.getPosts();
     if (posts.length === 0) {
-      return res.status(404).json({
-        code: 404,
+      return res.status(200).json({
+        code: 200,
         message: `No results for ${req.params.title}`,
       });
     }

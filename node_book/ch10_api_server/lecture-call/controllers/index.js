@@ -96,10 +96,12 @@ exports.searchByHashtag = async (req, res, next) => {
       req,
       `/posts/hashtag/${encodeURIComponent(req.params.hashtag)}`
     );
+    console.log(`#result: ${result}`);
     return res.json(result.data);
   } catch (error) {
     console.error(error);
     return next(error);
+    // return;
   }
 };
 
