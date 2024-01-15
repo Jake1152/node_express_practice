@@ -1,7 +1,8 @@
 const axios = require("axios");
 
 // 자주 쓰는 URL을 상수로 뺀다
-const URL = `http://localhost:${process.env.API_PORT}/v1`;
+
+const URL = `http://localhost:${process.env.API_PORT}/${process.env.API_VERSION}`;
 /**
  * 요청을 보낼때 headers에 origin값을 넣어야한다.
  * origin값은 요청보내는 주소이다.
@@ -69,7 +70,14 @@ const request = async (req, api) => {
       return request(req, api);
     }
     // token 위조
-    throw error;
+    // throw error;
+    /**
+     * throw으로 error를 처리했어서 클라이언트 상에서 에러메시지 표시가 되지 않았었다
+     *   에러처리 미들웨어에서 처리됨
+     * return error.response로 변경하여 처리한다.
+     *
+     */
+    return error.response;
   }
 };
 
