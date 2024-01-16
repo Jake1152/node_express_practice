@@ -1,9 +1,5 @@
 const express = require("express");
-const {
-  verifyToken,
-  apiLimiter,
-  premiumApiLimiter,
-} = require("../middlewares");
+const { verifyToken, apiLimiter } = require("../middlewares");
 const {
   createToken,
   tokenTest,
@@ -22,10 +18,10 @@ const router = express.Router();
 /**
  * 회원정보에 따라 다르게 표현
  */
-router.post("/token", apiLimiter, premiumApiLimiter, createToken);
-router.get("/test", apiLimiter, verifyToken, tokenTest);
+router.post("/token", apiLimiter, createToken);
+router.get("/test", verifyToken, apiLimiter, tokenTest);
 
-router.get("/posts/my", apiLimiter, verifyToken, getMyPosts);
-router.get("/posts/hashtag/:title", apiLimiter, verifyToken, getPostsByHashtag);
+router.get("/posts/my", verifyToken, apiLimiter, getMyPosts);
+router.get("/posts/hashtag/:title", verifyToken, apiLimiter, getPostsByHashtag);
 
 module.exports = router;

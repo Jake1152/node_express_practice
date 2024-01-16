@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 const rateLimit = require("express-rate-limit");
 
 exports.isLoggedIn = (req, res, next) => {
@@ -61,27 +62,46 @@ exports.verifyToken = (req, res, next) => {
   }
 };
 
-exports.apiLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 10,
-  handler(req, res) {
-    res.status(this.statusCode).json({
-      code: this.statusCode,
-      message: "1분에 10번 요청 가능",
-    });
-  },
-});
+/**
+ * 미들웨어 확장패턴 적용 이전 버젼
+ */
+// exports.apiLimiter = rateLimit({
+//   windowMs: 60 * 1000,
+//   max: 10,
+//   handler(req, res) {
+//     res.status(this.statusCode).json({
+//       code: this.statusCode,
+//       message: "1분에 10번 요청 가능",
+//     });
+//   },
+// });
 
-exports.premiumApiLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 10,
-  handler(req, res) {
-    res.status(this.statusCode).json({
-      code: this.statusCode,
-      message: "1분에 10번 요청 가능",
-    });
-  },
-});
+/**
+ * 미들웨어 확장 패턴 적용 버젼
+ */
+exports.apiLimiter = async (req, res, next) => {
+  let user;
+  console.log(`# res.locals.decoded: ${res.locals.decoded}`);
+  if (res.locals.decoded) {
+    try {
+      user = await User.findOne({
+        where: { id: res.locals.decoded.id },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  rateLimit({
+    windowMs: 60 * 1000,
+    max: 1, //user?.type === "preminum" ? 1 : 1,
+    handler(req, res) {
+      res.status(this.statusCode).json({
+        code: this.statusCode,
+        message: `1분에 1번 요청 가능`,
+      });
+    },
+  })(req, res, next);
+};
 
 exports.deprecated = (req, res) => {
   res.status(410).json({

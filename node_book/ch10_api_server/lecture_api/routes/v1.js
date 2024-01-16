@@ -28,10 +28,10 @@ router.use(deprecated);
  * client secret은  req.body를 통해서 전달된다.
  * req.body.clientSecret
  */
-router.post("/token", deprecated, createToken);
-router.get("/test", deprecated, verifyToken, tokenTest);
+router.post("/token", createToken);
+router.get("/test", verifyToken, tokenTest);
 
-router.get("/posts/my", deprecated, verifyToken, getMyPosts);
-router.get("/posts/hashtag/:title", deprecated, verifyToken, getPostsByHashtag);
+router.get("/posts/my", verifyToken, getMyPosts);
+router.get("/posts/hashtag/:title", verifyToken, getPostsByHashtag);
 
 module.exports = router;

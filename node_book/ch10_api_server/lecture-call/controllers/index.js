@@ -91,7 +91,7 @@ exports.getMyPosts = async (req, res, next) => {
   // return res.send(200)
   try {
     const result = await request(req, "/posts/my");
-    return res.json(result.data);
+    return res.json(result?.data);
   } catch (error) {
     console.error(error);
     return next(error);
@@ -120,7 +120,7 @@ exports.test = async (req, res, next) => {
       //   res.send("Token is vailded");
       // console.log(`#process.env.CLIENT_SECRET: ${process.env.CLIENT_SECRET}`);
       const tokenResult = await axios.post(
-        `http://localhost:${process.env.API_PORT}/v1/token`,
+        `http://localhost:${process.env.API_PORT}/${process.env.API_VERSION}/token`,
         {
           clientSecret: process.env.CLIENT_SECRET,
         }
@@ -138,7 +138,7 @@ exports.test = async (req, res, next) => {
     }
     // jwt는 headers에 authorization을 넣는다.
     const result = await axios.get(
-      `http://localhost:${process.env.API_PORT}/v1/test`,
+      `http://localhost:${process.env.API_PORT}/${process.env.API_VERSION}/test`,
       {
         headers: { authorization: req.session.jwt },
       }
