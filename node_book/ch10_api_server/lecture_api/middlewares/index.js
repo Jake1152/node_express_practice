@@ -76,31 +76,36 @@ exports.verifyToken = (req, res, next) => {
 //   },
 // });
 
+const limiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: async (req, res) => {
+    if ((await req.user?.type) === "premium") {
+      console.log(`#req.user.type : ${req.user.type}`);
+      return 100;
+    }
+    console.log(`#req.user : ${req.user}`);
+    return 10;
+  }, //user?.type === "preminum" ? 1 : 1,
+  handler(req, res) {
+    console.log(req.user);
+    console.log(req.rateLimit);
+    res.status(this.statusCode).json({
+      code: this.statusCode,
+      message: `1분에 ${limiter["max"]}번 요청 가능`,
+    });
+  },
+});
+
 /**
  * 미들웨어 확장 패턴 적용 버젼
  */
 exports.apiLimiter = async (req, res, next) => {
   let user;
-  console.log(`# res.locals.decoded: ${res.locals.decoded}`);
   if (res.locals.decoded) {
-    try {
-      user = await User.findOne({
-        where: { id: res.locals.decoded.id },
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    user = await User.findOne({ where: { id: res.locals.decoded } });
   }
-  rateLimit({
-    windowMs: 60 * 1000,
-    max: 1, //user?.type === "preminum" ? 1 : 1,
-    handler(req, res) {
-      res.status(this.statusCode).json({
-        code: this.statusCode,
-        message: `1분에 1번 요청 가능`,
-      });
-    },
-  })(req, res, next);
+  req.user = user;
+  limiter(req, res, next);
 };
 
 exports.deprecated = (req, res) => {
