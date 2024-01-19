@@ -152,3 +152,7 @@ exports.test = async (req, res, next) => {
     return next(error);
   }
 };
+
+exports.renderMain = (req, res) => {
+  res.render("main", { key: process.env.CLIENT_SECRET });
+};

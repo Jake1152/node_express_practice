@@ -114,3 +114,13 @@ exports.deprecated = (req, res) => {
     message: "새로운 버젼이 나왔습니다. 이전 버젼은 지양해주세요",
   });
 };
+
+/**
+ * cors 미들웨어 확장 패턴 버젼
+ */
+exports.corsWhenDomainMatches = async (req, res, next) => {
+  cors({
+    origin: "http://localhost:4000",
+    credentials: true, // cookie도 같이 처리
+  });
+};
