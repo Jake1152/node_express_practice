@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const rateLimit = require("express-rate-limit");
+const cors = require("cors");
+const { Domain } = require("Domain");
 
 exports.isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
@@ -118,9 +120,33 @@ exports.deprecated = (req, res) => {
 /**
  * cors 미들웨어 확장 패턴 버젼
  */
+/**
+ * 고민될 부분.
+ * verify Token보다 먼저 했기에 사용자가 누구인지 알수 없는 것 아닌가?
+ * Client에서 client Secret도 보내고
+ * 그다음에 얘네를 보낸 도메인이 localHost 4000에서 요청
+ * 브라우저에서 자동으로 origin을 넣어준다
+ * origin
+ * 으로 client secret를 검사하면 된다
+ * 사용자가 누구인지는 모르지만 host는 new URL
+ * origin 헤더를 가져와서 처리
+ *
+ */
 exports.corsWhenDomainMatches = async (req, res, next) => {
-  cors({
-    origin: "http://localhost:4000",
-    credentials: true, // cookie도 같이 처리
+  const domain = await Domain.findOne({
+    // origin 헤더를 가져와서 URL분석을 통해서 호스트만 추출해내는 것
+    where: { host: new URL(req.get("origin")).host },
   });
+  if (domain) {
+    cors({
+      origin: req.get("origin"),
+      credentials: true,
+    })(req, res, next);
+  } else {
+    next;
+  }
+  // cors({
+  //   origin: "http://localhost:4000",
+  //   credentials: true, // cookie도 같이 처리
+  // });
 };

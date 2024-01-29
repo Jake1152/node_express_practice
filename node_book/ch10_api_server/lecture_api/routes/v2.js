@@ -28,11 +28,11 @@ const router = express.Router();
 router.use(corsWhenDomainMatches);
 
 /**
- * cors 모듈을 이용한 해결방법
+ * cors 모듈 + 미들웨어 확장 패던을 이용한 해결방법
  * 일일이 에러 케이스 맞추지 않아도 처리할 수 있다.
  * 사람마다 origin주소가 다를 것이다. 어떤 주소에서 접근할 수 있게 허용할 것인가?
  * 미들웨어 확장패턴을 다시 쓴다
- *  사람마다 다른 것이 포인트!
+ *  여기서는 client마다 origin 주소가 다른 것이 포인트!
  */
 router.use(
   cors({
